@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zenith Works — Creator Partnership Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06080F;
+  --bg2:#090D18;
+  --panel:#0D1220;
+  --panel2:#111828;
+  --card:#131B2E;
+  --border:rgba(255,255,255,0.06);
+  --border-hot:rgba(255,102,0,0.3);
+  --orange:#FF6600;
+  --orange2:#FF8533;
+  --gold:#FFB400;
+  --cyan:#00D4FF;
+  --text:#F2F4FF;
+  --text2:#9BA8C0;
+  --muted:#4A5568;
+  --font-h:'Syne',sans-serif;
+  --font-b:'Inter',sans-serif;
+  --font-m:'Space Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x:hidden}
+
+/* AMBIENT GLOW BG */
+.ambient{
+  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+}
+.amb-orb{
+  position:absolute;border-radius:50%;filter:blur(100px);
+}
+.amb-1{width:600px;height:400px;top:-100px;right:10%;
+  background:radial-gradient(ellipse,rgba(255,102,0,0.07),transparent 70%);
+  animation:drift1 12s ease-in-out infinite;}
+.amb-2{width:400px;height:400px;bottom:20%;left:-80px;
+  background:radial-gradient(circle,rgba(0,212,255,0.05),transparent 70%);
+  animation:drift2 15s ease-in-out infinite;}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,40px)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-30px)}}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:9999;
+  height:64px;padding:0 6%;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(6,8,15,0.8);backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  display:flex;align-items:center;gap:9px;
+  text-decoration:none;font-family:var(--font-h);
+  font-size:17px;font-weight:800;color:var(--text);
+}
+.logo-sq{
+  width:34px;height:34px;
+  background:linear-gradient(135deg,var(--orange),var(--gold));
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-m);font-size:13px;font-weight:700;color:#fff;
+}
+.logo span{color:var(--orange)}
+
+.nav-mid{display:flex;gap:2px;list-style:none}
+.nav-mid a{
+  font-size:13px;font-weight:500;color:var(--text2);
+  text-decoration:none;padding:7px 13px;border-radius:7px;transition:all 0.18s;
+}
+.nav-mid a:hover,.nav-mid a.act{color:var(--text)}
+.nav-mid a.act{color:var(--orange)}
+
+.nav-end{display:flex;gap:9px;align-items:center}
+.n-btn{
+  font-family:var(--font-b);font-size:13px;font-weight:600;
+  padding:8px 18px;border-radius:8px;cursor:pointer;
+  text-decoration:none;display:inline-block;transition:all 0.2s;border:none;
+}
+.n-ghost{background:rgba(255,255,255,0.05);color:var(--text2);border:1px solid var(--border)}
+.n-ghost:hover{color:var(--text);background:rgba(255,255,255,0.08)}
+.n-hot{background:var(--orange);color:#fff;box-shadow:0 4px 20px rgba(255,102,0,0.35)}
+.n-hot:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(255,102,0,0.5)}
+
+.hbg{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hbg span{display:block;width:21px;height:1.5px;background:var(--text);border-radius:2px;transition:all 0.3s}
+.hbg.o span:nth-child(1){transform:rotate(45deg) translate(4.5px,4.5px)}
+.hbg.o span:nth-child(2){opacity:0}
+.hbg.o span:nth-child(3){transform:rotate(-45deg) translate(4.5px,-4.5px)}
+
+.mob-menu{
+  position:fixed;inset:0;top:64px;
+  background:rgba(6,8,15,0.97);backdrop-filter:blur(20px);
+  z-index:9998;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:20px;
+  transform:translateY(-100%);opacity:0;
+  transition:transform 0.35s ease,opacity 0.35s ease;
+}
+.mob-menu.o{transform:translateY(0);opacity:1}
+.mob-menu a{
+  font-family:var(--font-h);font-size:28px;font-weight:700;
+  color:var(--text);text-decoration:none;transition:color 0.2s;
+}
+.mob-menu a:hover{color:var(--orange)}
+
+/* ─── PAGES ─── */
+.page{display:none}
+.page.act{display:block}
+
+/* ════════════════════════════════
+   HOME — completely unique layout
+   ════════════════════════════════ */
+
+/* SPLIT HERO — left text, right visual panel */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:row;
+  position:relative;z-index:1;
+  padding-top:64px;
+  overflow:hidden;
+  align-items:stretch;
+}
+.hero-left{
+  flex:0 0 55%;
+  padding:80px 6% 80px 6%;
+  display:flex;flex-direction:column;justify-content:center;
+  border-right:1px solid var(--border);
+  position:relative;z-index:2;
+}
+.hero-right{
+  flex:0 0 45%;
+  background:linear-gradient(160deg,#0D1525 0%,#080C18 100%);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:40px 24px;
+  position:relative;overflow:hidden;
+}
+.hero-right{
+  background:linear-gradient(160deg,#0D1525 0%,#080C18 100%);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:60px 44px;gap:14px;
+  position:relative;overflow:hidden;
+}
+.hero-right::before{
+  content:'';position:absolute;top:-120px;right:-60px;
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(255,102,0,0.13),transparent 65%);
+  pointer-events:none;
+}
+.hero-right::after{
+  content:'';position:absolute;bottom:-80px;left:-40px;
+  width:280px;height:280px;
+  background:radial-gradient(circle,rgba(0,212,255,0.06),transparent 65%);
+  pointer-events:none;
+}
+
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-m);font-size:11px;letter-spacing:2px;
+  color:var(--text2);border:1px solid var(--border);
+  background:rgba(255,255,255,0.02);
+  padding:6px 14px;border-radius:4px;margin-bottom:28px;
+  width:fit-content;
+}
+.live-dot{width:6px;height:6px;background:#22c55e;border-radius:50%;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.15}}
+
+.hero h1{
+  font-family:var(--font-h);
+  font-size:clamp(42px,5vw,70px);
+  font-weight:800;letter-spacing:-2.5px;
+  line-height:1.0;margin-bottom:22px;
+}
+.hero h1 .o{color:var(--orange)}
+.hero p{
+  font-size:16px;color:var(--text2);line-height:1.85;
+  max-width:480px;margin-bottom:40px;
+}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:56px}
+.btn-lg{
+  font-family:var(--font-b);font-size:14px;font-weight:600;
+  padding:14px 30px;border-radius:10px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all 0.22s;border:none;
+}
+.btn-fill{background:var(--orange);color:#fff;box-shadow:0 4px 22px rgba(255,102,0,0.3)}
+.btn-fill:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(255,102,0,0.5)}
+.btn-line{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.15)}
+.btn-line:hover{border-color:var(--orange);color:var(--orange)}
+
+/* Horizontal stat strip */
+.hero-kpis{display:flex;gap:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.kpi{flex:1;padding:20px 0;border-right:1px solid var(--border);text-align:center}
+.kpi:last-child{border-right:none}
+.kpi-n{font-family:var(--font-h);font-size:26px;font-weight:800;color:var(--orange);letter-spacing:-1px}
+.kpi-l{font-size:11px;color:var(--text2);font-family:var(--font-m);letter-spacing:1px;margin-top:2px}
+
+/* Right side — vertical info cards */
+.info-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:16px;padding:22px 24px;
+  backdrop-filter:blur(12px);
+  transition:all 0.3s;
+  position:relative;overflow:hidden;
+}
+.info-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(to right,transparent,rgba(255,102,0,0.4),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.info-card:hover{
+  border-color:rgba(255,102,0,0.25);
+  background:rgba(255,102,0,0.05);
+  transform:translateX(4px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.3);
+}
+.info-card:hover::before{opacity:1}
+.ic-label{
+  font-family:var(--font-m);font-size:9px;letter-spacing:3px;
+  color:var(--orange);margin-bottom:12px;
+  text-transform:uppercase;display:flex;align-items:center;gap:6px;
+}
+.ic-label::before{content:'';width:16px;height:1px;background:var(--orange);opacity:0.5}
+.ic-value{
+  font-family:var(--font-h);font-size:26px;font-weight:800;
+  letter-spacing:-1px;margin-bottom:4px;
+  background:linear-gradient(135deg,#fff 60%,rgba(255,180,100,0.8));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.ic-sub{font-size:12px;color:var(--text2);font-family:var(--font-b);letter-spacing:0.2px}
+.ic-bar{height:3px;background:rgba(255,255,255,0.06);border-radius:3px;margin-top:14px;overflow:hidden}
+.ic-fill{
+  height:100%;
+  background:linear-gradient(to right,var(--orange),var(--gold));
+  border-radius:3px;
+  animation:grow 3s ease-in-out infinite alternate;
+  box-shadow:0 0 8px rgba(255,102,0,0.5);
+}
+@keyframes grow{from{width:30%}to{width:88%}}
+.ic-avatars{display:flex;margin-top:12px;align-items:center}
+.ic-av{
+  width:28px;height:28px;border-radius:50%;
+  border:2px solid rgba(255,255,255,0.12);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:#fff;
+  margin-left:-8px;flex-shrink:0;
+  font-family:var(--font-h);
+  box-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+.ic-av:first-child{margin-left:0}
+.ic-av.more{
+  background:rgba(255,255,255,0.08);
+  color:var(--text2);font-family:var(--font-m);
+  font-size:9px;letter-spacing:0;
+  border-color:rgba(255,255,255,0.1);
+}
+
+/* ─── TICKER ─── */
+.ticker{
+  background:var(--panel);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:18px 0;overflow:hidden;position:relative;z-index:1;
+}
+.ticker-track{display:flex;gap:40px;animation:tick 25s linear infinite;white-space:nowrap}
+.ticker-track:hover{animation-play-state:paused}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tick-item{
+  display:flex;align-items:center;gap:14px;flex-shrink:0;
+  font-family:var(--font-m);font-size:11px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);
+}
+.tick-item .dot{color:var(--orange);font-size:8px}
+
+/* ─── WHAT WE DO — horizontal card row ─── */
+.what-we-do{padding:100px 6%;position:relative;z-index:1}
+.wwd-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:52px;gap:40px}
+.wwd-header .left{}
+.eye{font-family:var(--font-m);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:12px;display:block}
+.big-h{font-family:var(--font-h);font-size:clamp(28px,3.5vw,46px);font-weight:800;letter-spacing:-1.5px;line-height:1.08}
+.big-h .gold{color:var(--gold)}
+.wwd-header p{font-size:15px;color:var(--text2);max-width:320px;line-height:1.8;text-align:right}
+
+/* Horizontal scrollable service strip */
+.srv-strip{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:2px;
+  background:var(--border);border-radius:16px;overflow:hidden;
+}
+.srv-cell{
+  background:var(--panel);padding:36px 28px;
+  transition:background 0.25s;position:relative;overflow:hidden;
+}
+.srv-cell:hover{background:var(--panel2)}
+.srv-cell::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:2px;background:linear-gradient(to right,var(--orange),var(--gold));
+  transform:scaleX(0);transform-origin:left;transition:transform 0.3s;
+}
+.srv-cell:hover::after{transform:scaleX(1)}
+.srv-n{font-family:var(--font-m);font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:20px}
+.srv-ico{font-size:28px;margin-bottom:16px;display:block}
+.srv-ttl{font-family:var(--font-h);font-size:15px;font-weight:700;margin-bottom:8px;letter-spacing:-0.3px}
+.srv-desc{font-size:12px;color:var(--text2);line-height:1.7}
+
+/* ─── NUMBERS — asymmetric ─── */
+.numbers{
+  background:var(--panel);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:80px 6%;position:relative;z-index:1;
+}
+.num-grid{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;gap:0;align-items:center}
+.num-divider{background:var(--border);height:80px}
+.num-block{text-align:center;padding:20px 40px}
+.num-big{
+  font-family:var(--font-h);font-size:clamp(52px,6vw,88px);
+  font-weight:800;letter-spacing:-4px;
+  background:linear-gradient(135deg,var(--orange),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;line-height:1;margin-bottom:8px;
+}
+.num-lbl{font-size:13px;color:var(--text2);font-weight:500;letter-spacing:0.3px}
+
+/* ─── CREATOR HUB — two-column layout ─── */
+.hub-page{position:relative;z-index:1}
+.hub-top{
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
+  padding:100px 6% 56px;
+}
+.hub-top-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:60px;align-items:center;
+}
+.hub-top h1{font-family:var(--font-h);font-size:clamp(36px,5vw,64px);font-weight:800;letter-spacing:-2px;line-height:1.05}
+.hub-top p{font-size:15px;color:var(--text2);line-height:1.85}
+
+/* FILTER BAR — inline pill style */
+.filter-bar{
+  padding:28px 6%;background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  display:flex;flex-direction:column;gap:16px;
+  position:relative;z-index:1;
+}
+.filter-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.filter-label{font-family:var(--font-m);font-size:9px;letter-spacing:2px;color:var(--orange);text-transform:uppercase;white-space:nowrap;min-width:60px}
+.f-btn{
+  font-family:var(--font-m);font-size:11px;letter-spacing:1px;
+  padding:7px 16px;border-radius:6px;cursor:pointer;transition:all 0.18s;
+  background:rgba(255,255,255,0.03);color:var(--text2);border:1px solid var(--border);
+}
+.f-btn:hover{color:var(--text);border-color:rgba(255,102,0,0.25)}
+.f-btn.on{background:var(--orange);color:#fff;border-color:transparent;box-shadow:0 3px 14px rgba(255,102,0,0.35)}
+
+.c-bar{
+  padding:20px 6%;font-family:var(--font-m);
+  font-size:12px;color:var(--text2);letter-spacing:1px;
+  position:relative;z-index:1;
+}
+.c-bar strong{color:var(--orange)}
+
+.c-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:16px;padding:0 6% 100px;position:relative;z-index:1;
+}
+.c-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:24px;transition:all 0.25s;
+}
+.c-card:hover{border-color:var(--border-hot);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+.c-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.c-ava{
+  width:50px;height:50px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-h);font-size:18px;font-weight:800;
+}
+.c-badges{display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.c-tag{font-family:var(--font-m);font-size:9px;letter-spacing:1px;padding:3px 9px;border-radius:4px}
+.c-tag.feat{background:rgba(255,180,0,0.1);color:var(--gold);border:1px solid rgba(255,180,0,0.2)}
+.c-tag.ver{background:rgba(0,212,255,0.08);color:var(--cyan);border:1px solid rgba(0,212,255,0.18)}
+.c-plat-tag{font-family:var(--font-m);font-size:9px;color:var(--muted);letter-spacing:1px}
+.c-nm{font-family:var(--font-h);font-size:16px;font-weight:800;margin-bottom:3px;letter-spacing:-0.3px}
+.c-ni{font-size:11px;color:var(--orange);font-family:var(--font-m);letter-spacing:1px;margin-bottom:14px}
+.c-row{display:flex;gap:20px;border-top:1px solid var(--border);padding-top:12px}
+.c-st span{display:block;font-family:var(--font-h);font-size:16px;font-weight:800}
+.c-st small{font-size:10px;color:var(--text2);font-family:var(--font-m);letter-spacing:1px}
+
+/* ─── PHILOSOPHY — horizontal cards ─── */
+.phil{background:var(--panel);padding:100px 6%;position:relative;z-index:1}
+.phil-head{text-align:center;margin-bottom:64px}
+.phil-row{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border-radius:16px;overflow:hidden}
+.phil-cell{
+  background:var(--panel2);padding:48px 36px;
+  position:relative;transition:background 0.25s;
+}
+.phil-cell:hover{background:var(--card)}
+.phil-num{
+  font-family:var(--font-h);font-size:80px;font-weight:800;
+  color:rgba(255,102,0,0.05);position:absolute;top:16px;right:20px;
+  line-height:1;pointer-events:none;transition:color 0.25s;
+}
+.phil-cell:hover .phil-num{color:rgba(255,102,0,0.08)}
+.phil-ico{font-size:30px;margin-bottom:22px}
+.phil-ttl{font-family:var(--font-h);font-size:18px;font-weight:800;margin-bottom:12px;letter-spacing:-0.3px}
+.phil-cell p{font-size:13px;color:var(--text2);line-height:1.8}
+
+/* ─── CTA — full-width asymmetric ─── */
+.cta-block{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-top:1px solid var(--border);
+  position:relative;z-index:1;
+}
+.cta-left{
+  background:var(--orange);
+  padding:80px 6%;display:flex;flex-direction:column;justify-content:center;
+}
+.cta-left h2{font-family:var(--font-h);font-size:clamp(32px,4vw,54px);font-weight:800;letter-spacing:-1.5px;line-height:1.05;color:#fff;margin-bottom:14px}
+.cta-left p{font-size:15px;color:rgba(255,255,255,0.75);margin-bottom:32px;line-height:1.7}
+.cta-btn-w{background:#fff;color:var(--orange);font-family:var(--font-b);font-size:14px;font-weight:700;padding:14px 28px;border-radius:8px;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.2s}
+.cta-btn-w:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,0.2)}
+.cta-right{
+  background:var(--panel);
+  padding:80px 6%;display:flex;flex-direction:column;justify-content:center;
+  border-left:1px solid var(--border);
+  min-height:200px;
+}
+.cta-right h3{font-family:var(--font-h);font-size:28px;font-weight:800;letter-spacing:-0.5px;margin-bottom:12px}
+.cta-right p{font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.8}
+.status-row{display:flex;align-items:center;gap:8px;font-family:var(--font-m);font-size:11px;color:var(--orange);letter-spacing:2px;margin-bottom:24px}
+
+/* ─── APPLY PAGE ─── */
+.apply-pg{position:relative;z-index:1}
+.apply-banner{
+  background:var(--panel);border-bottom:1px solid var(--border);
+  padding:100px 6% 60px;
+}
+.apply-inner{display:grid;grid-template-columns:1fr 1.15fr;gap:100px}
+.ap-info h2{font-family:var(--font-h);font-size:36px;font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:16px}
+.ap-info p{font-size:14px;color:var(--text2);line-height:1.9;margin-bottom:30px}
+.ap-list{display:flex;flex-direction:column;gap:14px;margin-bottom:28px}
+.ap-row{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:var(--text2);line-height:1.6}
+.ap-check{width:20px;height:20px;background:rgba(255,102,0,0.1);border:1px solid rgba(255,102,0,0.25);border-radius:5px;display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px}
+.note-box{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:0 10px 10px 0;padding:18px 20px;margin-top:10px}
+.note-lbl{font-family:var(--font-m);font-size:9px;letter-spacing:2px;color:var(--orange);margin-bottom:8px}
+.note-box p{font-size:12px;color:var(--text2);line-height:1.7}
+
+.form-panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:44px 40px;position:relative;overflow:hidden}
+.form-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--orange),var(--gold),transparent)}
+.fp-ttl{font-family:var(--font-h);font-size:20px;font-weight:800;margin-bottom:4px}
+.fp-sub{font-family:var(--font-m);font-size:10px;color:var(--text2);letter-spacing:1px;margin-bottom:28px}
+.fg{margin-bottom:16px}
+.fl{display:block;font-family:var(--font-m);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:6px}
+.fi{width:100%;background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:12px 15px;font-family:var(--font-b);font-size:13px;border-radius:9px;outline:none;transition:border-color 0.18s;appearance:none}
+.fi:focus{border-color:rgba(255,102,0,0.45)}
+.fi::placeholder{color:var(--muted)}
+select.fi{cursor:pointer}
+select.fi option{background:var(--card)}
+textarea.fi{resize:vertical;min-height:90px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fsub{width:100%;background:var(--orange);color:#fff;border:none;padding:15px;font-family:var(--font-h);font-size:14px;font-weight:700;border-radius:10px;cursor:pointer;margin-top:4px;transition:all 0.22s}
+.fsub:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,102,0,0.45)}
+.fn{text-align:center;font-size:11px;color:var(--muted);margin-top:12px;font-family:var(--font-m)}
+
+.f-loader{display:none;text-align:center;padding:28px}
+.spin{width:38px;height:38px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.suc{display:none;text-align:center;padding:48px 16px}
+.suc.show{display:block}
+.suc-i{font-size:50px;margin-bottom:14px}
+.suc-h{font-family:var(--font-h);font-size:20px;font-weight:800;color:var(--orange);margin-bottom:10px}
+.suc-p{font-size:13px;color:var(--text2);line-height:1.7}
+
+/* ─── CONTACT ─── */
+.ct-pg{position:relative;z-index:1}
+.ct-split{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 64px)}
+.ct-left{background:var(--panel);padding:100px 6%;border-right:1px solid var(--border)}
+.ct-left h1{font-family:var(--font-h);font-size:clamp(32px,4vw,54px);font-weight:800;letter-spacing:-1.5px;line-height:1.08;margin-bottom:18px}
+.ct-left>p{font-size:15px;color:var(--text2);line-height:1.85;margin-bottom:48px}
+.ct-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px}
+.ct-ico{width:42px;height:42px;background:rgba(255,102,0,0.08);border:1px solid rgba(255,102,0,0.18);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all 0.2s}
+.ct-item:hover .ct-ico{background:rgba(255,102,0,0.15);border-color:rgba(255,102,0,0.35)}
+.ct-det h4{font-size:13px;font-weight:700;margin-bottom:3px}
+.ct-det p{font-size:12px;color:var(--text2)}
+.ct-det a{color:var(--orange);text-decoration:none}
+.note-box2{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 10px 10px 0;padding:18px 20px;margin-top:32px}
+.ct-right{padding:100px 6%;background:var(--bg2)}
+
+/* ─── SERVICES PAGE ─── */
+.srv-pg{padding:100px 6%;position:relative;z-index:1}
+.srv-pg-header{text-align:center;margin-bottom:64px}
+.srv-pg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.srv-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:36px 32px;transition:all 0.25s;position:relative;overflow:hidden}
+.srv-card:hover{border-color:var(--border-hot);transform:translateY(-4px);background:var(--panel2)}
+.srv-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--orange),var(--gold));transform:scaleY(0);transform-origin:top;transition:transform 0.3s}
+.srv-card:hover::before{transform:scaleY(1)}
+.srv-card .ico{font-size:32px;margin-bottom:18px;display:block}
+.srv-card h3{font-family:var(--font-h);font-size:17px;font-weight:800;margin-bottom:10px;letter-spacing:-0.3px}
+.srv-card p{font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:16px}
+.srv-card-tags{display:flex;flex-wrap:wrap;gap:6px}
+.st{font-family:var(--font-m);font-size:9px;letter-spacing:1px;color:var(--orange);background:rgba(255,102,0,0.08);border:1px solid rgba(255,102,0,0.15);padding:3px 9px;border-radius:4px}
+
+/* ─── FOOTER ─── */
+footer{background:var(--panel);border-top:1px solid var(--border);padding:64px 6% 28px;position:relative;z-index:1}
+.ft-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.ft-brand .logo{margin-bottom:14px;display:inline-flex}
+.ft-brand p{font-size:13px;color:var(--text2);line-height:1.8;max-width:250px;margin-bottom:20px}
+.soc{display:flex;gap:8px}
+.sc{width:34px;height:34px;border:1px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:13px;cursor:pointer;background:none;text-decoration:none;transition:all 0.18s}
+.sc:hover{border-color:var(--orange);color:var(--orange);background:rgba(255,102,0,0.06)}
+.ft-col h4{font-family:var(--font-m);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:16px}
+.ft-links{list-style:none;display:flex;flex-direction:column;gap:9px}
+.ft-links a{font-size:13px;color:var(--text2);text-decoration:none;transition:color 0.18s}
+.ft-links a:hover{color:var(--text)}
+.ft-contact{font-size:12px;color:var(--text2);font-family:var(--font-m);margin-bottom:5px}
+.ft-contact a{color:var(--orange);text-decoration:none}
+.ft-bottom{border-top:1px solid var(--border);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.ft-copy{font-family:var(--font-m);font-size:11px;color:var(--muted)}
+.ft-copy a{color:var(--orange);text-decoration:none}
+
+/* ─── AUTH MODAL ─── */
+.modal{position:fixed;inset:0;background:rgba(6,8,15,0.9);backdrop-filter:blur(16px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.28s}
+.modal.o{opacity:1;pointer-events:all}
+.modal-box{background:var(--card);border:1px solid var(--border-hot);border-radius:18px;padding:44px 40px;width:100%;max-width:420px;position:relative;overflow:hidden;transform:translateY(16px);transition:transform 0.28s}
+.modal.o .modal-box{transform:translateY(0)}
+.modal-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--orange),var(--gold))}
+.m-close{position:absolute;top:16px;right:16px;width:30px;height:30px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:7px;cursor:pointer;color:var(--text2);font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.18s;border:none}
+.m-close:hover{color:var(--orange)}
+.m-logo{text-align:center;margin-bottom:24px}
+.m-tabs{display:flex;gap:3px;background:var(--panel2);border-radius:9px;padding:3px;margin-bottom:28px}
+.m-tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:600;border-radius:7px;cursor:pointer;color:var(--text2);background:none;border:none;transition:all 0.18s}
+.m-tab.on{background:var(--card);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:28px;right:28px;
+  background:var(--card);border:1px solid var(--border-hot);
+  border-radius:12px;padding:14px 20px;
+  display:flex;align-items:center;gap:10px;
+  z-index:999999;font-size:13px;font-weight:600;
+  transform:translateY(70px);opacity:0;
+  transition:all 0.35s cubic-bezier(0.4,0,0.2,1);max-width:340px;
+}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* FADE */
+.fu{opacity:1;transform:none;}
+.fu.in{opacity:1;transform:none;}
+.d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}
+
+@media(max-width:1100px){
+  .srv-strip{grid-template-columns:repeat(2,1fr)}
+  .ft-grid{grid-template-columns:1fr 1fr;gap:32px}
+}
+
+@media(max-width:900px){
+  .nav-mid,.nav-end .n-ghost{display:none}
+  .hbg{display:flex}
+  .hero{min-height:auto;flex-direction:column}
+  .hero-left{flex:none;width:100%;padding:48px 5% 40px;border-right:none;justify-content:flex-start}
+  .hero-right{display:none}
+  .wwd-header{flex-direction:column;align-items:flex-start}
+  .wwd-header p{text-align:left;max-width:100%}
+  .srv-strip{grid-template-columns:1fr 1fr}
+  .num-grid{grid-template-columns:1fr;background:none}
+  .num-divider{display:none}
+  .phil-row{grid-template-columns:1fr}
+  .cta-block{grid-template-columns:1fr}
+  .hub-top-inner{grid-template-columns:1fr}
+  .apply-inner{grid-template-columns:1fr;gap:36px}
+  .ct-split{grid-template-columns:1fr}
+  .srv-pg-grid{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:600px){
+  .hero{min-height:auto;flex-direction:column;padding-top:64px}
+  .hero-left{flex:none;width:100%;padding:32px 5% 28px;border:none;justify-content:flex-start;min-height:unset;transform:none !important}
+  .hero-right{display:none}
+  .float-scene{display:none}
+  .hero h1{font-size:clamp(28px,8vw,38px);letter-spacing:-0.5px;line-height:1.1;margin-bottom:12px;transform:none !important}
+  .hero p{font-size:14px;margin-bottom:20px;max-width:100%}
+  .hero-ctas{gap:10px}
+  .btn-lg{font-size:13px;padding:10px 18px;border-radius:10px}
+  .kpi-strip-inner{display:grid;grid-template-columns:1fr 1fr}
+  .kpi-div{display:none}
+  .kpi-strip .kpi{padding:18px 8px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .kpi-strip .kpi:nth-child(2n){border-right:none}
+  .kpi-strip .kpi:nth-last-child(-n+2){border-bottom:none}
+  .kpi-strip .kpi-n{font-size:22px}
+  .kpi-strip .kpi-l{font-size:9px}
+  .what-we-do{padding:44px 5%}
+  .srv-strip{grid-template-columns:1fr}
+  .srv-cell{padding:22px 18px}
+  .numbers{padding:36px 5%}
+  .num-grid{grid-template-columns:1fr 1fr;background:none}
+  .num-block{padding:14px 8px}
+  .num-big{font-size:clamp(32px,10vw,52px);letter-spacing:-1.5px}
+  .num-divider{display:none}
+  .num-lbl{font-size:11px}
+  .phil{padding:44px 5%}
+  .phil-cell{padding:24px 16px}
+  .phil-row{grid-template-columns:1fr}
+  .cta-block{grid-template-columns:1fr}
+  .cta-left{padding:32px 5%}
+  .cta-right{padding:32px 5%;border-left:none;border-top:1px solid rgba(255,255,255,0.06);min-height:unset}
+  .cta-left h2{font-size:clamp(24px,6vw,34px);letter-spacing:-0.5px}
+  .big-h{font-size:clamp(22px,6vw,30px);letter-spacing:-0.5px}
+  .eye{font-size:9px}
+  .mq-track{gap:18px}
+  .tick-item{font-size:9px;letter-spacing:1px}
+  .c-grid{grid-template-columns:1fr;padding:0 5% 90px}
+  .c-bar{padding:12px 5%}
+  .hub-top{padding:64px 5% 28px}
+  .filter-bar{padding:14px 5%}
+  .f-btn{font-size:10px;padding:5px 10px}
+  .f2{grid-template-columns:1fr}
+  .form-panel{padding:22px 14px}
+  .apply-banner{padding:64px 5% 28px}
+  .apply-inner{gap:20px}
+  .ct-left{padding:64px 5% 32px}
+  .ct-right{padding:0 5% 64px}
+  .srv-pg{padding:64px 5% 48px}
+  .srv-pg-grid{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr;gap:22px}
+  footer{padding:40px 5% 120px}
+  nav{padding:0 4%}
+  .logo{font-size:15px}
+  .logo-sq{width:30px;height:30px;font-size:11px}
+}
+
+@media(max-width:400px){
+  .hero h1{font-size:26px}
+  .num-grid{grid-template-columns:1fr}
+  .num-block{border-bottom:1px solid var(--border)}
+  .num-block:last-child{border-bottom:none}
+}
+
+/* ── KPI STRIP (below hero fold) ── */
+.kpi-strip{
+  background:var(--panel);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:0;position:relative;z-index:1;
+  overflow:hidden;
+}
+.kpi-strip::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right,transparent,var(--orange),var(--gold),transparent);
+}
+.kpi-strip-inner{
+  display:flex;align-items:stretch;
+  max-width:100%;
+}
+.kpi-strip .kpi{
+  flex:1;padding:32px 0;text-align:center;
+  position:relative;
+  transition:background 0.25s;
+}
+.kpi-strip .kpi:hover{background:rgba(255,102,0,0.04)}
+.kpi-div{width:1px;background:var(--border);flex-shrink:0}
+.kpi-strip .kpi-n{
+  font-family:var(--font-h);font-size:36px;font-weight:800;
+  color:var(--orange);letter-spacing:-1.5px;line-height:1;
+  margin-bottom:6px;
+}
+.kpi-strip .kpi-l{
+  font-size:12px;color:var(--text2);
+  font-family:var(--font-m);letter-spacing:1px;
+}
+
+/* ── MOUSE TRAIL ── */
+.trail-dot{
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:99998;
+  transform:translate(-50%,-50%);
+  transition:width 0.1s,height 0.1s,opacity 0.5s;
+}
+
+.mp-disc.spinning{animation-play-state:running}
+}
+.mp-status.pl{color:#22c55e}
+
+
+/* Wave bars */
+.mp-bar.a{background:linear-gradient(to top,var(--orange),var(--gold))}
+
+/* Controls */
+
+.mp-vol::-webkit-slider-thumb{
+  -webkit-appearance:none;width:11px;height:11px;
+  background:var(--orange);border-radius:50%;cursor:pointer;
+  box-shadow:0 0 6px rgba(255,102,0,0.6);
+}
+
+/* Progress bar */
+
+/* ── HERO RIGHT: 3D FLOATING LAYOUT like Media Nexus ── */
+.hero-right{
+  background:linear-gradient(160deg,#0D1525 0%,#080C18 100%);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:40px 24px;
+  gap:0;
+  position:relative;overflow:hidden;
+}
+.hero-right::before,.hero-right::after{display:none}
+
+/* Floating card wrapper — absolutely positioned like MN */
+.float-scene{
+  position:relative;
+  width:100%;height:100%;
+  perspective:900px;
+}
+
+.f-card{
+  position:absolute;
+  background:rgba(13,18,32,0.85);
+  backdrop-filter:blur(20px) saturate(1.5);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:18px;
+  padding:18px 20px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.04);
+  transform-style:preserve-3d;
+  transition:transform 0.08s ease-out, box-shadow 0.3s;
+  cursor:default;
+  will-change:transform;
+}
+.f-card:hover{
+  box-shadow:0 28px 80px rgba(0,0,0,0.6),0 0 30px rgba(255,102,0,0.12);
+}
+
+/* Card positions — staggered like MN screenshots */
+.f-card-1{
+  top:5%;right:4%;width:260px;
+  animation:floatA 6s ease-in-out infinite;
+}
+.f-card-2{
+  top:38%;right:36%;width:230px;
+  animation:floatB 7s ease-in-out infinite 1s;
+}
+.f-card-3{
+  bottom:8%;right:6%;width:250px;
+  animation:floatC 5.5s ease-in-out infinite 2s;
+}
+
+@keyframes floatA{
+  0%,100%{transform:translateY(0px) rotate3d(1,0,0,0deg)}
+  50%{transform:translateY(-14px) rotate3d(1,0,0,1deg)}
+}
+@keyframes floatB{
+  0%,100%{transform:translateY(0px) rotate3d(0,1,0,0deg)}
+  50%{transform:translateY(-10px) rotate3d(0,1,0,1deg)}
+}
+@keyframes floatC{
+  0%,100%{transform:translateY(0px)}
+  50%{transform:translateY(-18px)}
+}
+
+/* ── HERO H1 TILT ── */
+.hero h1{
+  transform-style:preserve-3d;
+  transition:transform 0.15s ease-out;
+  display:inline-block;
+  cursor:default;
+  will-change:transform;
+}
+
+/* Live now badge on card 1 */
+.live-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:#c0392b;color:#fff;
+  font-family:var(--font-m);font-size:10px;
+  letter-spacing:2px;padding:4px 10px;
+  border-radius:50px;margin-bottom:12px;
+  font-weight:700;
+}
+.live-badge-dot{
+  width:6px;height:6px;background:#ff6b6b;
+  border-radius:50%;animation:blink 1s infinite;
+}
+
+/* Confirmed sponsorship popup style */
+.conf-badge{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px;padding:10px 14px;
+  margin-bottom:10px;
+}
+.conf-ico{
+  width:32px;height:32px;background:rgba(139,92,246,0.3);
+  border-radius:8px;display:flex;align-items:center;
+  justify-content:center;font-size:14px;flex-shrink:0;
+}
+.conf-txt h4{font-size:13px;font-weight:700;margin-bottom:2px}
+.conf-txt p{font-size:10px;color:var(--text2);font-family:var(--font-m)}
+
+/* Skeleton content lines */
+.sk-line{
+  height:8px;border-radius:4px;
+  background:rgba(255,255,255,0.08);margin-bottom:6px;
+}
+.sk-line.orange{background:rgba(255,102,0,0.3)}
+.sk-line.short{width:60%}
+.sk-line.med{width:80%}
+
+</style>
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true">
+  <div class="amb-orb amb-1"></div>
+  <div class="amb-orb amb-2"></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo" onclick="go('home');return false">
+    <div class="logo-sq">ZW</div>
+    Zenith<span>Works</span>
+  </a>
+  <ul class="nav-mid">
+    <li><a href="#" onclick="go('home');return false" data-p="home" class="act">Home</a></li>
+    <li><a href="#" onclick="go('services');return false" data-p="services">Services</a></li>
+    <li><a href="#" onclick="go('creators');return false" data-p="creators">Creators</a></li>
+    <li><a href="#" onclick="go('contact');return false" data-p="contact">Contact</a></li>
+  </ul>
+  <div class="nav-end">
+    <button class="n-btn n-ghost" onclick="openAuth('login')">Sign In</button>
+    <a href="#" class="n-btn n-hot" onclick="go('apply');return false">Apply Now</a>
+  </div>
+  <button class="hbg" id="hbg" onclick="toggleMob()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mobMenu">
+  <a href="#" onclick="go('home');closeMob();return false">Home</a>
+  <a href="#" onclick="go('services');closeMob();return false">Services</a>
+  <a href="#" onclick="go('creators');closeMob();return false">Creators</a>
+  <a href="#" onclick="go('apply');closeMob();return false">Apply Now</a>
+  <a href="#" onclick="go('contact');closeMob();return false">Contact</a>
+  <a href="#" onclick="openAuth('login');closeMob();return false" style="color:var(--orange)">Sign In</a>
+</div>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="page-home" class="page act">
+
+  <!-- SPLIT HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">
+        <div class="live-dot"></div>
+        INDIA'S #1 CREATOR AGENCY
+      </div>
+      <h1>Drive Growth<br>with the <span class="o">Right<br>Creators</span></h1>
+      <p>Connect your brand with 200+ verified content creators across YouTube, Instagram, and more. Run data‑driven campaigns from discovery to payments.</p>
+      <div class="hero-ctas">
+        <a href="#" class="btn-lg btn-fill" onclick="openAuth('login');return false">Talk to Sales</a>
+        <a href="#" class="btn-lg btn-line" onclick="go('apply');return false">I am a Creator</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="float-scene" id="floatScene">
+
+        <!-- CARD 1: Live Now + Confirmed Sponsorship (top right) -->
+        <div class="f-card f-card-1" id="fc1">
+          <div class="live-badge">
+            <div class="live-badge-dot"></div>
+            LIVE NOW
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+            <div style="width:32px;height:32px;background:linear-gradient(135deg,var(--orange),var(--gold));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;font-family:var(--font-h)">ZW</div>
+            <div>
+              <div style="font-size:11px;font-weight:700;font-family:var(--font-h)">Zenith Works</div>
+              <div style="font-size:9px;color:var(--text2);font-family:var(--font-m)">Creator Agency</div>
+            </div>
+          </div>
+          <div class="sk-line med"></div>
+          <div class="sk-line short orange"></div>
+          <div class="sk-line med"></div>
+          <div class="sk-line short"></div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:12px">
+            <div style="width:26px;height:26px;background:linear-gradient(135deg,var(--orange),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff">▶</div>
+            <div style="font-size:10px;color:var(--text2);font-family:var(--font-m)">Campaign Live</div>
+          </div>
+        </div>
+
+        <!-- CARD 2: New Sponsorship Confirmed (overlapping popup) -->
+        <div class="f-card f-card-2" id="fc2">
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--text2);letter-spacing:1px;margin-bottom:8px">NEW SPONSORSHIP</div>
+          <div class="conf-badge">
+            <div class="conf-ico">🤝</div>
+            <div class="conf-txt">
+              <h4>Confirmed ✓</h4>
+              <p>$12K · 3 deliverables</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;margin-top:6px">
+            <div style="flex:1;height:3px;background:linear-gradient(to right,var(--orange),var(--gold));border-radius:3px;box-shadow:0 0 8px rgba(255,102,0,0.4)"></div>
+          </div>
+        </div>
+
+        <!-- CARD 3: Deal Revenue ROI (bottom) -->
+        <div class="f-card f-card-3" id="fc3">
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--text2);letter-spacing:1px;margin-bottom:10px">DEAL REVENUE</div>
+          <div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:6px">
+            <div style="font-family:var(--font-h);font-size:28px;font-weight:800;letter-spacing:-1px;color:var(--text)">38.4%</div>
+            <div style="display:flex;align-items:center;gap:4px;padding-bottom:5px;font-family:var(--font-m);font-size:10px;color:#22c55e">
+              <span>↑</span>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text2);font-family:var(--font-m);margin-bottom:14px">vs. last month</div>
+          <!-- Mini bar chart animated -->
+          <div style="display:flex;gap:3px;align-items:flex-end;height:32px">
+            <div style="flex:1;border-radius:2px 2px 0 0;background:rgba(255,102,0,0.2);height:35%"></div>
+            <div style="flex:1;border-radius:2px 2px 0 0;background:rgba(255,102,0,0.3);height:55%"></div>
+            <div style="flex:1;border-radius:2px 2px 0 0;background:rgba(255,102,0,0.4);height:45%"></div>
+            <div style="flex:1;border-radius:2px 2px 0 0;background:rgba(255,102,0,0.55);height:70%"></div>
+            <div style="flex:1;border-radius:2px 2px 0 0;background:rgba(255,102,0,0.7);height:80%"></div>
+            <div style="flex:1;border-radius:2px 2px 0 0;background:linear-gradient(to top,var(--orange),var(--gold));height:100%;box-shadow:0 0 8px rgba(255,102,0,0.5)"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- KPI STRIP — visible after scroll -->
+  <div class="kpi-strip fu">
+    <div class="kpi-strip-inner">
+      <div class="kpi"><div class="kpi-n" data-target="10" data-s="M+">0</div><div class="kpi-l">Audience Reach</div></div>
+      <div class="kpi-div"></div>
+      <div class="kpi"><div class="kpi-n" data-target="100" data-pre="$" data-s="K+">0</div><div class="kpi-l">Creator Earnings</div></div>
+      <div class="kpi-div"></div>
+      <div class="kpi"><div class="kpi-n" data-target="30" data-s="+">0</div><div class="kpi-l">Brand Partners</div></div>
+      <div class="kpi-div"></div>
+      <div class="kpi"><div class="kpi-n" data-target="200" data-s="+">0</div><div class="kpi-l">Verified Creators</div></div>
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <div class="tick-item"><span class="dot">◆</span>Creator Partnerships</div>
+      <div class="tick-item"><span class="dot">◆</span>Brand Sponsorships</div>
+      <div class="tick-item"><span class="dot">◆</span>Elite Management</div>
+      <div class="tick-item"><span class="dot">◆</span>Revenue Growth</div>
+      <div class="tick-item"><span class="dot">◆</span>Authentic Deals</div>
+      <div class="tick-item"><span class="dot">◆</span>India's Best</div>
+      <div class="tick-item"><span class="dot">◆</span>200+ Creators</div>
+      <div class="tick-item"><span class="dot">◆</span>Creator Partnerships</div>
+      <div class="tick-item"><span class="dot">◆</span>Brand Sponsorships</div>
+      <div class="tick-item"><span class="dot">◆</span>Elite Management</div>
+      <div class="tick-item"><span class="dot">◆</span>Revenue Growth</div>
+      <div class="tick-item"><span class="dot">◆</span>Authentic Deals</div>
+      <div class="tick-item"><span class="dot">◆</span>India's Best</div>
+      <div class="tick-item"><span class="dot">◆</span>200+ Creators</div>
+    </div>
+  </div>
+
+  <!-- WHAT WE DO -->
+  <section class="what-we-do">
+    <div class="wwd-header fu">
+      <div class="left">
+        <span class="eye">// What We Do</span>
+        <h2 class="big-h">Everything a Creator<br>Could <span class="gold">Possibly Need</span></h2>
+      </div>
+      <p>From brand deals to cinematic production — we handle the business so you focus on making great content.</p>
+    </div>
+    <div class="srv-strip fu">
+      <div class="srv-cell"><div class="srv-n">01</div><span class="srv-ico">🤝</span><div class="srv-ttl">Elite Sponsorships</div><p class="srv-desc">Private brand network, contract negotiation, and full deal management.</p></div>
+      <div class="srv-cell"><div class="srv-n">02</div><span class="srv-ico">📦</span><div class="srv-ttl">Creator Management</div><p class="srv-desc">Inbox mastery, scheduling, and operations — all handled for you.</p></div>
+      <div class="srv-cell"><div class="srv-n">03</div><span class="srv-ico">🎬</span><div class="srv-ttl">Video Production</div><p class="srv-desc">Cinematic editing built for maximum watch time and subscriber growth.</p></div>
+      <div class="srv-cell"><div class="srv-n">04</div><span class="srv-ico">📊</span><div class="srv-ttl">Analytics & Strategy</div><p class="srv-desc">Data-driven roadmaps to your next subscriber and revenue milestone.</p></div>
+    </div>
+    <div style="text-align:right;margin-top:20px">
+      <a href="#" class="btn-lg btn-line" onclick="go('services');return false" style="font-size:13px;padding:10px 22px">View all services →</a>
+    </div>
+  </section>
+
+  <!-- NUMBERS -->
+  <div class="numbers">
+    <div class="num-grid">
+      <div class="num-block fu"><div class="num-big" data-target="100" data-s="+">0</div><div class="num-lbl">Global Creators</div></div>
+      <div class="num-divider"></div>
+      <div class="num-block fu d1"><div class="num-big" data-target="250" data-s="+">0</div><div class="num-lbl">Successful Deals</div></div>
+      <div class="num-divider"></div>
+      <div class="num-block fu d2"><div class="num-big" data-target="50" data-s="K+">0</div><div class="num-lbl">Revenue Generated</div></div>
+    </div>
+  </div>
+
+  <!-- PHILOSOPHY -->
+  <section class="phil">
+    <div class="phil-head fu">
+      <span class="eye">// What Drives Us</span>
+      <h2 class="big-h" style="text-align:center">Our Foundation &amp; <span class="gold">Core Values</span></h2>
+    </div>
+    <div class="phil-row fu">
+      <div class="phil-cell">
+        <div class="phil-num" aria-hidden="true">01</div>
+        <div class="phil-ico">🎯</div>
+        <div class="phil-ttl">Strategic Mission</div>
+        <p>We cultivate an ecosystem where authenticity meets opportunity. Every partnership creates measurable, long-term value for creators and brands alike.</p>
+      </div>
+      <div class="phil-cell">
+        <div class="phil-num" aria-hidden="true">02</div>
+        <div class="phil-ico">👁️</div>
+        <div class="phil-ttl">Future Vision</div>
+        <p>We're architecting the future of how digital influence is professionally managed across India. Not just a marketplace — a movement.</p>
+      </div>
+      <div class="phil-cell">
+        <div class="phil-num" aria-hidden="true">03</div>
+        <div class="phil-ico">❤️</div>
+        <div class="phil-ttl">Human Values</div>
+        <p>Integrity is our currency. Radical transparency and mutual respect are at the heart of every contract we sign with creators and brands.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SPLIT -->
+  <div class="cta-block">
+    <div class="cta-left">
+      <h2>Ready for the Next Level?</h2>
+      <p>Applications open for Q2 2026. Join 100+ creators already growing with Zenith Works. Serious inquiries only.</p>
+      <a href="#" class="cta-btn-w" onclick="go('apply');return false">Apply to Join →</a>
+    </div>
+    <div class="cta-right">
+      <div class="status-row"><div class="live-dot"></div>OPEN — Q2 2026</div>
+      <h3>Are You a Brand?</h3>
+      <p>Looking to run a campaign with the right creators? Talk to our partnerships team and get matched within 48 hours.</p>
+      <a href="#" class="btn-lg btn-fill" style="font-size:13px;padding:11px 24px" onclick="go('contact');return false">Get a Quote →</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <a href="#" class="logo" onclick="go('home');return false"><div class="logo-sq">ZW</div>Zenith<span>Works</span></a>
+        <p>Connecting creators with brands to build meaningful partnerships that drive real growth across India and beyond.</p>
+        <div class="soc">
+          <button class="sc" onclick="toast('Instagram: @zenithworks.in','📸')">📸</button>
+          <button class="sc" onclick="toast('YouTube: /zenithworks','▶')">▶</button>
+          <button class="sc" onclick="toast('Twitter: @zenithworks','✕')">✕</button>
+          <button class="sc" onclick="toast('Discord: discord.gg/zenithworks','💬')">💬</button>
+        </div>
+      </div>
+      <div class="ft-col">
+        <h4>Company</h4>
+        <ul class="ft-links">
+          <li><a href="#" onclick="go('home');return false">About Us</a></li>
+          <li><a href="#" onclick="go('services');return false">Our Services</a></li>
+          <li><a href="#" onclick="go('creators');return false">Our Talents</a></li>
+          <li><a href="#" onclick="go('contact');return false">Contact</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>For Creators</h4>
+        <ul class="ft-links">
+          <li><a href="#">How It Works</a></li>
+          <li><a href="#" onclick="go('creators');return false">Creator FAQ</a></li>
+          <li><a href="#" onclick="go('apply');return false">Apply Now</a></li>
+          <li><a href="#">General FAQ</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Get In Touch</h4>
+        <div class="ft-contact">✉ <a href="mailto:contact@zenithworks.in">contact@zenithworks.in</a></div>
+        <div class="ft-contact">📍 Mumbai, India 🇮🇳</div>
+        <div class="ft-contact">📞 <a href="tel:+919876543210">+91 98765 43210</a></div>
+        <h4 style="margin-top:18px">Legal</h4>
+        <ul class="ft-links"><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li></ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span class="ft-copy">© 2026 <a href="#">Zenith Works</a>. All rights reserved. Made in 🇮🇳 India</span>
+      <span class="ft-copy">// Empowering creators and brands authentically</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════ SERVICES ══════════ -->
+<div id="page-services" class="page">
+  <section class="srv-pg">
+    <div class="srv-pg-header fu">
+      <span class="eye">// What We Offer</span>
+      <h1 class="big-h">Our <span style="background:linear-gradient(135deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Services</span></h1>
+      <p style="font-size:15px;color:var(--text2);max-width:500px;margin:14px auto 0;line-height:1.8">Full-stack support for creators — from brand deals to production, we handle it so you can focus on content.</p>
+    </div>
+    <div class="srv-pg-grid">
+      <div class="srv-card fu d1"><span class="ico">🤝</span><h3>Elite Sponsorships</h3><p>Private brand network, negotiation, contracts, and full campaign management — end to end.</p><div class="srv-card-tags"><span class="st">Brand Deals</span><span class="st">Negotiation</span><span class="st">Contracts</span></div></div>
+      <div class="srv-card fu d2"><span class="ico">📦</span><h3>Creator Management</h3><p>Inbox mastery, schedule coordination, and business operations. Never miss an opportunity again.</p><div class="srv-card-tags"><span class="st">Inbox</span><span class="st">Scheduling</span><span class="st">Operations</span></div></div>
+      <div class="srv-card fu d3"><span class="ico">🎬</span><h3>Video Production</h3><p>Cinematic editing built for platform algorithms — hooks, pacing, and CTAs that convert viewers.</p><div class="srv-card-tags"><span class="st">Editing</span><span class="st">Retention</span><span class="st">Hooks</span></div></div>
+      <div class="srv-card fu d1"><span class="ico">🎨</span><h3>Visual Arts & Branding</h3><p>High-CTR thumbnails, logos, and full channel identity packages that make you unmistakable.</p><div class="srv-card-tags"><span class="st">Thumbnails</span><span class="st">Logos</span><span class="st">Identity</span></div></div>
+      <div class="srv-card fu d2"><span class="ico">📊</span><h3>Analytics & Strategy</h3><p>Deep channel analytics, growth roadmaps, and data-driven decisions to hit your next milestone.</p><div class="srv-card-tags"><span class="st">Data</span><span class="st">Growth</span><span class="st">Strategy</span></div></div>
+      <div class="srv-card fu d3"><span class="ico">🌐</span><h3>Cross-Platform Growth</h3><p>Expand to Instagram, TikTok, Discord — tailored strategies to build a multi-platform community.</p><div class="srv-card-tags"><span class="st">Instagram</span><span class="st">TikTok</span><span class="st">Community</span></div></div>
+    </div>
+    <div style="text-align:center;margin-top:56px">
+      <a href="#" class="btn-lg btn-fill" onclick="go('apply');return false">Apply to Join →</a>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════ CREATORS HUB ══════════ -->
+<div id="page-creators" class="page hub-page">
+  <div class="hub-top">
+    <div class="hub-top-inner fu">
+      <div>
+        <span class="eye">// Talent Roster</span>
+        <h1 class="hub-top h1" style="font-family:var(--font-h);font-size:clamp(40px,5.5vw,70px);font-weight:800;letter-spacing:-2.5px;line-height:1.0">Creator<br><span style="background:linear-gradient(135deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Hub</span></h1>
+      </div>
+      <p style="font-size:16px;color:var(--text2);line-height:1.9">Explore our most influential voices. Filter by niche or platform to find the perfect creator to amplify your brand across India and globally.</p>
+    </div>
+  </div>
+
+  <!-- FILTER BAR — exact niche list from screenshot -->
+  <div class="filter-bar">
+    <div class="filter-row">
+      <span class="filter-label">NICHE</span>
+      <div id="nicheWrap" style="display:flex;flex-wrap:wrap;gap:8px">
+        <button class="f-btn on" onclick="nFilter('all',this)">All</button>
+        <button class="f-btn" onclick="nFilter('Gaming',this)">Gaming</button>
+        <button class="f-btn" onclick="nFilter('Tech',this)">Tech</button>
+        <button class="f-btn" onclick="nFilter('Beauty',this)">Beauty</button>
+        <button class="f-btn" onclick="nFilter('Comedy',this)">Comedy</button>
+        <button class="f-btn" onclick="nFilter('Vlogs',this)">Vlogs</button>
+        <button class="f-btn" onclick="nFilter('Lifestyle',this)">Lifestyle</button>
+        <button class="f-btn" onclick="nFilter('Fashion',this)">Fashion</button>
+        <button class="f-btn" onclick="nFilter('Food',this)">Food</button>
+        <button class="f-btn" onclick="nFilter('Travel',this)">Travel</button>
+        <button class="f-btn" onclick="nFilter('Fitness',this)">Fitness</button>
+        <button class="f-btn" onclick="nFilter('Education',this)">Education</button>
+        <button class="f-btn" onclick="nFilter('Entertainment',this)">Entertainment</button>
+      </div>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">PLATFORM</span>
+      <div id="platWrap" style="display:flex;gap:8px">
+        <button class="f-btn on" onclick="pFilter('all',this)">All</button>
+        <button class="f-btn" onclick="pFilter('YouTube',this)">▶ YouTube</button>
+        <button class="f-btn" onclick="pFilter('Instagram',this)">◉ Instagram</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="c-bar" id="cBar">Showing <strong>0</strong> creators</div>
+  <div class="c-grid" id="cGrid"></div>
+</div>
+
+<!-- ══════════ APPLY ══════════ -->
+<div id="page-apply" class="page apply-pg">
+  <div class="apply-banner">
+    <div class="fu" style="margin-bottom:52px">
+      <span class="eye">// Join the Roster</span>
+      <h1 class="big-h">Creator <span style="background:linear-gradient(135deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Application</span></h1>
+    </div>
+    <div class="apply-inner">
+      <div class="fu">
+        <h2>Why Creators Choose Zenith Works</h2>
+        <p>We're a real team based in Mumbai, India — personally reviewing every application and matching creators with brands that genuinely fit their audience.</p>
+        <div class="ap-list">
+          <div class="ap-row"><div class="ap-check">✓</div><span>Get discovered by premium brands actively seeking creators in your niche</span></div>
+          <div class="ap-row"><div class="ap-check">✓</div><span>Dedicated campaign manager handles all brand communication</span></div>
+          <div class="ap-row"><div class="ap-check">✓</div><span>Transparent, no-hidden-fees deal structure — every detail upfront</span></div>
+          <div class="ap-row"><div class="ap-check">✓</div><span>Only partner with brands that add genuine value to your community</span></div>
+          <div class="ap-row"><div class="ap-check">✓</div><span>Access to full suite: management, editing, design, analytics</span></div>
+        </div>
+        <div class="note-box">
+          <div class="note-lbl">📋 WHERE DOES MY APPLICATION GO?</div>
+          <p>Directly emailed to our team at <strong style="color:var(--orange)">contact@zenithworks.in</strong>. You'll receive a confirmation copy instantly. Our team reviews within 48 hours.</p>
+        </div>
+      </div>
+      <div class="fu d1">
+        <div class="form-panel" id="apCard">
+          <div id="apInner">
+            <div class="fp-ttl">Submit Your Application</div>
+            <div class="fp-sub">// Emailed directly to our team — reviewed within 48 hrs</div>
+            <div class="f2">
+              <div class="fg"><label class="fl">First Name</label><input class="fi" type="text" id="afn" placeholder="Your name"></div>
+              <div class="fg"><label class="fl">Last Name</label><input class="fi" type="text" id="aln" placeholder="Last name"></div>
+            </div>
+            <div class="fg"><label class="fl">Email Address</label><input class="fi" type="email" id="aem" placeholder="business@channel.com"></div>
+            <div class="fg"><label class="fl">Channel / Profile URL</label><input class="fi" type="url" id="ach" placeholder="youtube.com/c/yourhandle"></div>
+            <div class="f2">
+              <div class="fg"><label class="fl">Subscribers</label>
+                <select class="fi" id="asb"><option value="">Select range</option><option>Under 1K</option><option>1K – 10K</option><option>10K – 50K</option><option>50K – 100K</option><option>100K – 500K</option><option>500K+</option></select>
+              </div>
+              <div class="fg"><label class="fl">Content Niche</label>
+                <select class="fi" id="ani"><option value="">Select niche</option><option>Gaming</option><option>Tech</option><option>Beauty</option><option>Comedy</option><option>Vlogs</option><option>Lifestyle</option><option>Fashion</option><option>Food</option><option>Travel</option><option>Fitness</option><option>Education</option><option>Entertainment</option></select>
+              </div>
+            </div>
+            <div class="fg"><label class="fl">About Your Channel</label><textarea class="fi" id="amsg" placeholder="Content style, audience, past collabs…"></textarea></div>
+            <button class="fsub" onclick="submitApply()">Submit Application</button>
+            <p class="fn">// Your application is emailed to our team. Confirmation sent to you.</p>
+          </div>
+          <div class="f-loader" id="apLoad"><div class="spin"></div><p style="color:var(--text2);font-size:13px">Sending…</p></div>
+          <div class="suc" id="apSuc"><div class="suc-i">🎉</div><div class="suc-h">Application Sent!</div><p class="suc-p">Emailed to our team at <strong>contact@zenithworks.in</strong>.<br>Check your inbox for confirmation.<br>We'll respond within <strong>48 hours</strong>.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ CONTACT ══════════ -->
+<div id="page-contact" class="page ct-pg">
+  <div class="ct-split">
+    <div class="ct-left fu">
+      <span class="eye">// Talk to Us</span>
+      <h1>Get in <span style="color:var(--orange)">Touch</span></h1>
+      <p>Whether you're a creator looking for representation, or a brand seeking the right creator — we'd love to hear from you. Based in Mumbai, serving globally.</p>
+      <div class="ct-item"><div class="ct-ico">✉</div><div class="ct-det"><h4>Email</h4><p><a href="mailto:contact@zenithworks.in">contact@zenithworks.in</a></p></div></div>
+      <div class="ct-item"><div class="ct-ico">📍</div><div class="ct-det"><h4>Location</h4><p>Mumbai, Maharashtra, India 🇮🇳</p></div></div>
+      <div class="ct-item"><div class="ct-ico">📞</div><div class="ct-det"><h4>Phone / WhatsApp</h4><p><a href="tel:+919876543210">+91 98765 43210</a></p></div></div>
+      <div class="ct-item"><div class="ct-ico">💬</div><div class="ct-det"><h4>Discord</h4><p><a href="#">discord.gg/zenithworks</a></p></div></div>
+      <div class="ct-item"><div class="ct-ico">⏱</div><div class="ct-det"><h4>Response Time</h4><p>24–48 hours (IST)</p></div></div>
+      <div class="note-box2">
+        <div class="note-lbl" style="color:var(--cyan)">📋 WHERE DOES MY MESSAGE GO?</div>
+        <p style="font-size:12px;color:var(--text2);line-height:1.7">Sent directly to <strong style="color:var(--orange)">contact@zenithworks.in</strong>. You receive a copy in your inbox immediately. No middleman, no bots.</p>
+      </div>
+    </div>
+    <div class="ct-right fu d1">
+      <div class="form-panel" id="ctCard">
+        <div id="ctInner">
+          <div class="fp-ttl">Send a Message</div>
+          <div class="fp-sub">// For business & partnership inquiries</div>
+          <div class="f2">
+            <div class="fg"><label class="fl">Your Name</label><input class="fi" type="text" id="cn" placeholder="Name"></div>
+            <div class="fg"><label class="fl">Your Email</label><input class="fi" type="email" id="ce" placeholder="your@email.com"></div>
+          </div>
+          <div class="fg"><label class="fl">Subject</label>
+            <select class="fi" id="cs"><option value="">Select topic</option><option>Creator Application</option><option>Brand Partnership</option><option>General Inquiry</option><option>Press / Media</option><option>Technical Support</option></select>
+          </div>
+          <div class="fg"><label class="fl">Message</label><textarea class="fi" id="cm" placeholder="What's on your mind…" style="min-height:130px"></textarea></div>
+          <button class="fsub" onclick="submitContact()">Send Message</button>
+          <p class="fn">// Goes directly to our team. You'll receive a copy in your inbox.</p>
+        </div>
+        <div class="f-loader" id="ctLoad"><div class="spin"></div><p style="color:var(--text2);font-size:13px">Sending…</p></div>
+        <div class="suc" id="ctSuc"><div class="suc-i">✅</div><div class="suc-h">Message Sent!</div><p class="suc-p">Sent to <strong>contact@zenithworks.in</strong>.<br>Check your inbox for a confirmation copy.<br>We'll reply within <strong>24–48 hours</strong>.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+  <div class="modal-box">
+    <button class="m-close" onclick="closeAuth()">✕</button>
+    <div class="m-logo">
+      <div class="logo-sq" style="width:46px;height:46px;font-size:16px;margin:0 auto 10px">ZW</div>
+      <div style="font-family:var(--font-h);font-size:19px;font-weight:800">Zenith<span style="color:var(--orange)">Works</span></div>
+    </div>
+    <div class="m-tabs">
+      <button class="m-tab on" id="tLogin" onclick="swTab('login')">Sign In</button>
+      <button class="m-tab" id="tReg" onclick="swTab('register')">Create Account</button>
+    </div>
+    <div id="loginF">
+      <div class="fg"><label class="fl">Email Address</label><input class="fi" type="email" id="lem" placeholder="your@email.com"></div>
+      <div class="fg"><label class="fl">Password</label><input class="fi" type="password" id="lpw" placeholder="Enter password"></div>
+      <div style="text-align:right;margin-bottom:16px"><a href="#" style="font-size:11px;color:var(--orange);text-decoration:none;font-family:var(--font-m)">Forgot password?</a></div>
+      <button class="fsub" onclick="doLogin()">Sign In</button>
+      <p class="fn" style="margin-top:10px">Stored locally in your browser · Demo mode</p>
+    </div>
+    <div id="regF" style="display:none">
+      <div class="f2">
+        <div class="fg"><label class="fl">First Name</label><input class="fi" type="text" id="rfn" placeholder="First"></div>
+        <div class="fg"><label class="fl">Last Name</label><input class="fi" type="text" id="rln" placeholder="Last"></div>
+      </div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="rem" placeholder="your@email.com"></div>
+      <div class="fg"><label class="fl">Password</label><input class="fi" type="password" id="rpw" placeholder="Min 8 characters"></div>
+      <div class="fg"><label class="fl">I am a</label>
+        <select class="fi" id="rrole"><option value="creator">Creator / YouTuber</option><option value="brand">Brand / Sponsor</option></select>
+      </div>
+      <button class="fsub" onclick="doRegister()">Create Account</button>
+      <p class="fn" style="margin-top:10px">Account saved in browser · Demo mode</p>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toastEl">
+  <span id="toastIco">✅</span>
+  <span id="toastTxt">Done!</span>
+</div>
+
+    <div class="mp-info">
+      <div class="mp-title" id="mpTitle">Zenith — Ambient Lo-Fi</div>
+      <div class="mp-status" id="mpStatus">Press ▶ to play</div>
+    </div>
+    <button class="mp-collapse-btn" id="mpCollapseBtn" onclick="toggleCollapse()" title="Minimize">‹</button>
+  </div>
+  <div class="mp-wave" id="mpWave"></div>
+  <div class="mp-progress" id="mpProgress">
+    <div class="mp-prog-fill" id="mpFill"></div>
+  </div>
+  <div class="mp-controls">
+    <button class="mp-play" id="mpPlay" onclick="toggleSong()">▶</button>
+    <input type="range" class="mp-vol" id="mpVol" min="0" max="100" value="70" oninput="setSongVol(this.value)" title="Volume">
+    <span class="mp-time" id="mpTime">∞</span>
+  </div>
+</div>
+
+<!-- MOUSE TRAIL CANVAS -->
+<canvas id="trailCanvas" style="position:fixed;inset:0;pointer-events:none;z-index:99997;"></canvas>
+
+<script>
+// EMAIL JS CONFIG
+// Replace with your real keys from emailjs.com (free) to actually receive emails
+const EJ_PUB = 'YOUR_PUBLIC_KEY';
+const EJ_SVC = 'YOUR_SERVICE_ID';
+const EJ_T_APPLY = 'template_apply';
+const EJ_T_CONTACT = 'template_contact';
+const EMAIL_ON = EJ_PUB !== 'YOUR_PUBLIC_KEY';
+try{ if(typeof emailjs!=='undefined'&&EMAIL_ON) emailjs.init(EJ_PUB); }catch(e){}
+
+// ── PAGE ROUTING ──
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('act'));
+  const pg = document.getElementById('page-'+id);
+  if(!pg) return;
+  pg.classList.add('act');
+  window.scrollTo({top:0,behavior:'instant'});
+  
+  if(id==='creators') renderCreators();
+  document.querySelectorAll('[data-p]').forEach(a=>
+    a.classList.toggle('act', a.dataset.p===id));
+}
+
+// ── MOBILE ──
+function toggleMob(){
+  document.getElementById('hbg').classList.toggle('o');
+  document.getElementById('mobMenu').classList.toggle('o');
+}
+function closeMob(){
+  document.getElementById('hbg').classList.remove('o');
+  document.getElementById('mobMenu').classList.remove('o');
+}
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll',()=>
+  document.getElementById('nav').classList.toggle('scrolled',scrollY>40));
+
+
+
+// ── COUNTERS ──
+function animN(el){
+  const t=parseInt(el.dataset.target);
+  const pre=el.dataset.pre||'';
+  const s=el.dataset.s||'';
+  // On mobile — show final number instantly
+  if(window.innerWidth < 900){
+    el.textContent=pre+t+s;
+    return;
+  }
+  const dur=1800, t0=performance.now();
+  const step=now=>{
+    const p=Math.min((now-t0)/dur,1);
+    const e=1-Math.pow(1-p,3);
+    el.textContent=pre+Math.round(e*t)+s;
+    if(p<1)requestAnimationFrame(step);
+    else el.textContent=pre+t+s;
+  };
+  requestAnimationFrame(step);
+}
+
+// Set all counters to final value immediately on mobile
+if(window.innerWidth < 900){
+  document.querySelectorAll('[data-target]').forEach(el=>{
+    const t=parseInt(el.dataset.target);
+    const pre=el.dataset.pre||'';
+    const s=el.dataset.s||'';
+    el.textContent=pre+t+s;
+  });
+} else {
+  // Desktop — animate on scroll
+  const cObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){animN(e.target);cObs.unobserve(e.target)}});
+  },{threshold:0.3});
+  document.querySelectorAll('[data-target]').forEach(el=>cObs.observe(el));
+}
+
+// ── CREATORS DATA ──
+const CD=[
+  {name:'ArcticZen',niche:'Gaming',plat:'YouTube',subs:'280K',avg:'45K',badge:'feat',c:'#FF6600',bg:'rgba(255,102,0,0.1)',i:'A'},
+  {name:'NovaPvP',niche:'Gaming',plat:'YouTube',subs:'145K',avg:'28K',badge:'ver',c:'#3B82F6',bg:'rgba(59,130,246,0.1)',i:'N'},
+  {name:'TechTide',niche:'Tech',plat:'YouTube',subs:'510K',avg:'120K',badge:'feat',c:'#FFB400',bg:'rgba(255,180,0,0.1)',i:'T'},
+  {name:'GadgetPulse',niche:'Tech',plat:'Instagram',subs:'198K',avg:'38K',badge:'ver',c:'#8B5CF6',bg:'rgba(139,92,246,0.1)',i:'G'},
+  {name:'GlowWithSiya',niche:'Beauty',plat:'Instagram',subs:'320K',avg:'85K',badge:'feat',c:'#EC4899',bg:'rgba(236,72,153,0.1)',i:'S'},
+  {name:'BeautyByRia',niche:'Beauty',plat:'YouTube',subs:'88K',avg:'16K',badge:'ver',c:'#F472B6',bg:'rgba(244,114,182,0.1)',i:'R'},
+  {name:'LaughterKing',niche:'Comedy',plat:'YouTube',subs:'430K',avg:'90K',badge:'feat',c:'#FBBF24',bg:'rgba(251,191,36,0.1)',i:'L'},
+  {name:'ComedyClips',niche:'Comedy',plat:'Instagram',subs:'67K',avg:'12K',badge:'ver',c:'#34D399',bg:'rgba(52,211,153,0.1)',i:'C'},
+  {name:'DailyDrift',niche:'Vlogs',plat:'YouTube',subs:'42K',avg:'8K',badge:'ver',c:'#F97316',bg:'rgba(249,115,22,0.1)',i:'D'},
+  {name:'VibeLog',niche:'Vlogs',plat:'Instagram',subs:'63K',avg:'12K',badge:'ver',c:'#A78BFA',bg:'rgba(167,139,250,0.1)',i:'V'},
+  {name:'LifeWithPriya',niche:'Lifestyle',plat:'YouTube',subs:'115K',avg:'22K',badge:'ver',c:'#0DD9C0',bg:'rgba(13,217,192,0.1)',i:'P'},
+  {name:'StyleByAkash',niche:'Fashion',plat:'Instagram',subs:'285K',avg:'60K',badge:'feat',c:'#6366F1',bg:'rgba(99,102,241,0.1)',i:'A'},
+  {name:'FoodieRahul',niche:'Food',plat:'YouTube',subs:'175K',avg:'35K',badge:'ver',c:'#EF4444',bg:'rgba(239,68,68,0.1)',i:'R'},
+  {name:'TravelWithSam',niche:'Travel',plat:'YouTube',subs:'230K',avg:'48K',badge:'feat',c:'#10B981',bg:'rgba(16,185,129,0.1)',i:'S'},
+  {name:'FitIndia',niche:'Fitness',plat:'YouTube',subs:'390K',avg:'80K',badge:'feat',c:'#F59E0B',bg:'rgba(245,158,11,0.1)',i:'F'},
+  {name:'LearnWithAnkit',niche:'Education',plat:'YouTube',subs:'620K',avg:'140K',badge:'feat',c:'#3B82F6',bg:'rgba(59,130,246,0.1)',i:'A'},
+  {name:'EntertainHub',niche:'Entertainment',plat:'YouTube',subs:'155K',avg:'32K',badge:'ver',c:'#8B5CF6',bg:'rgba(139,92,246,0.1)',i:'E'},
+];
+
+let aN='all', aP='all';
+
+function nFilter(v,btn){
+  aN=v;
+  document.querySelectorAll('#nicheWrap .f-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on'); renderCreators();
+}
+function pFilter(v,btn){
+  aP=v;
+  document.querySelectorAll('#platWrap .f-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on'); renderCreators();
+}
+function renderCreators(){
+  const g=document.getElementById('cGrid');
+  const cBar=document.getElementById('cBar');
+  if(!g)return;
+  const f=CD.filter(c=>(aN==='all'||c.niche===aN)&&(aP==='all'||c.plat===aP));
+  if(cBar) cBar.innerHTML=`Showing <strong>${f.length}</strong> creators`;
+  g.innerHTML=f.map(c=>`
+    <div class="c-card">
+      <div class="c-head">
+        <div class="c-ava" style="background:${c.bg};color:${c.c}">${c.i}</div>
+        <div class="c-badges">
+          <span class="c-tag ${c.badge}">${c.badge==='feat'?'★ Featured':'✓ Verified'}</span>
+          <span class="c-plat-tag">${c.plat==='YouTube'?'▶':'◉'} ${c.plat}</span>
+        </div>
+      </div>
+      <div class="c-nm">${c.name}</div>
+      <div class="c-ni">${c.niche}</div>
+      <div class="c-row">
+        <div class="c-st"><span>${c.subs}</span><small>Subscribers</small></div>
+        <div class="c-st"><span>${c.avg}</span><small>Avg Views</small></div>
+      </div>
+    </div>`).join('');
+}
+
+// ── AUTH ──
+function openAuth(tab){
+  document.getElementById('authModal').classList.add('o');
+  swTab(tab||'login');
+  document.body.style.overflow='hidden';
+}
+function closeAuth(){
+  document.getElementById('authModal').classList.remove('o');
+  document.body.style.overflow='';
+}
+document.getElementById('authModal').addEventListener('click',function(e){if(e.target===this)closeAuth()});
+function swTab(t){
+  document.getElementById('tLogin').classList.toggle('on',t==='login');
+  document.getElementById('tReg').classList.toggle('on',t==='register');
+  document.getElementById('loginF').style.display=t==='login'?'block':'none';
+  document.getElementById('regF').style.display=t==='register'?'block':'none';
+}
+function doLogin(){
+  const em=document.getElementById('lem').value.trim();
+  const pw=document.getElementById('lpw').value;
+  if(!em||!pw){toast('Please fill all fields','⚠️');return}
+  const users=JSON.parse(localStorage.getItem('zw_u')||'{}');
+  if(users[em]&&users[em].pw===btoa(pw)){
+    localStorage.setItem('zw_s',JSON.stringify({email:em,name:users[em].name}));
+    closeAuth(); toast(`Welcome back, ${users[em].name}! 👋`,'✅');
+  } else { toast('Invalid email or password','❌'); }
+}
+function doRegister(){
+  const fn=document.getElementById('rfn').value.trim();
+  const em=document.getElementById('rem').value.trim();
+  const pw=document.getElementById('rpw').value;
+  const role=document.getElementById('rrole').value;
+  if(!fn||!em||!pw){toast('Please fill all fields','⚠️');return}
+  if(pw.length<8){toast('Password min 8 characters','⚠️');return}
+  const users=JSON.parse(localStorage.getItem('zw_u')||'{}');
+  if(users[em]){toast('Email already registered','❌');return}
+  const ln=document.getElementById('rln').value.trim();
+  users[em]={name:fn+' '+ln,pw:btoa(pw),role,at:new Date().toISOString()};
+  localStorage.setItem('zw_u',JSON.stringify(users));
+  localStorage.setItem('zw_s',JSON.stringify({email:em,name:fn}));
+  closeAuth(); toast(`Account created! Welcome, ${fn} 🎉`,'✅');
+}
+
+// ── FORMS ──
+function submitApply(){
+  const fn=document.getElementById('afn').value.trim();
+  const em=document.getElementById('aem').value.trim();
+  const ch=document.getElementById('ach').value.trim();
+  if(!fn||!em||!ch){toast('Name, Email & Channel URL required','⚠️');return}
+  if(!em.includes('@')){toast('Enter a valid email','⚠️');return}
+  document.getElementById('apInner').style.display='none';
+  document.getElementById('apLoad').style.display='block';
+  const p={from_name:fn+' '+document.getElementById('aln').value,from_email:em,
+    channel:ch,subscribers:document.getElementById('asb').value,
+    niche:document.getElementById('ani').value,message:document.getElementById('amsg').value,
+    to_email:'contact@zenithworks.in'};
+  if(EMAIL_ON){emailjs.send(EJ_SVC,EJ_T_APPLY,p).then(showApSuc).catch(showApSuc)}
+  else setTimeout(showApSuc,2000);
+}
+function showApSuc(){
+  document.getElementById('apLoad').style.display='none';
+  document.getElementById('apSuc').classList.add('show');
+  toast('Application sent! Check your email 📧','✅');
+}
+function submitContact(){
+  const cn=document.getElementById('cn').value.trim();
+  const ce=document.getElementById('ce').value.trim();
+  const cm=document.getElementById('cm').value.trim();
+  if(!cn||!ce||!cm){toast('Please fill all required fields','⚠️');return}
+  if(!ce.includes('@')){toast('Enter a valid email','⚠️');return}
+  document.getElementById('ctInner').style.display='none';
+  document.getElementById('ctLoad').style.display='block';
+  const p={from_name:cn,from_email:ce,subject:document.getElementById('cs').value||'General',
+    message:cm,to_email:'contact@zenithworks.in'};
+  if(EMAIL_ON){emailjs.send(EJ_SVC,EJ_T_CONTACT,p).then(showCtSuc).catch(showCtSuc)}
+  else setTimeout(showCtSuc,2000);
+}
+function showCtSuc(){
+  document.getElementById('ctLoad').style.display='none';
+  document.getElementById('ctSuc').classList.add('show');
+  toast('Message sent! We will reply soon 📩','✅');
+}
+
+// ── TOAST ──
+let tTimer;
+function toast(msg,ico='✅'){
+  const el=document.getElementById('toastEl');
+  document.getElementById('toastTxt').textContent=msg;
+  document.getElementById('toastIco').textContent=ico;
+  el.classList.add('show');
+  clearTimeout(tTimer);
+  tTimer=setTimeout(()=>el.classList.remove('show'),3800);
+}
+
+// ── KEYBOARD ──
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeAuth();closeMob()}
+});
+
+// ── MINI BAR CHART ANIMATION ──
+(function(){
+  const heights=['30%','45%','40%','62%','75%','100%'];
+  const ids=['b1','b2','b3','b4','b5','b6'];
+  ids.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(el) el.style.height=heights[i];
+  });
+})();
+
+// ═══════════════════════════════════════
+// 3D FLOATING CARDS — mouse parallax
+// ═══════════════════════════════════════
+(function(){
+  const scene = document.getElementById('floatScene');
+  const cards = [
+    document.getElementById('fc1'),
+    document.getElementById('fc2'),
+    document.getElementById('fc3'),
+  ];
+  // Parallax depth multipliers per card
+  const depths = [0.018, 0.012, 0.022];
+  // Tilt multipliers
+  const tilts  = [12, 10, 14];
+
+  if(!scene) return;
+
+  let targetX = 0, targetY = 0;
+  let currentX = [0,0,0], currentY = [0,0,0];
+  let animId;
+
+  window.addEventListener('mousemove', e => {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    targetX = (e.clientX / vw - 0.5) * 2;  // -1 to 1
+    targetY = (e.clientY / vh - 0.5) * 2;  // -1 to 1
+  });
+
+  function lerp(a, b, t){ return a + (b - a) * t; }
+
+  function animate(){
+    cards.forEach((card, i) => {
+      if(!card) return;
+      currentX[i] = lerp(currentX[i], targetX, 0.06);
+      currentY[i] = lerp(currentY[i], targetY, 0.06);
+
+      const moveX = currentX[i] * depths[i] * 120;
+      const moveY = currentY[i] * depths[i] * 80;
+      const rotX  = -currentY[i] * tilts[i] * 0.5;
+      const rotY  =  currentX[i] * tilts[i] * 0.5;
+
+      card.style.transform = `
+        translateX(${moveX}px)
+        translateY(${moveY}px)
+        rotateX(${rotX}deg)
+        rotateY(${rotY}deg)
+      `;
+    });
+    animId = requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// ═══════════════════════════════════════
+// HERO LEFT — full section tilt on mouse
+// ═══════════════════════════════════════
+(function(){
+  const heroLeft = document.querySelector('.hero-left');
+  if(!heroLeft) return;
+
+  let tx = 0, ty = 0;
+  let cx = 0, cy = 0;
+
+  heroLeft.style.transformStyle = 'preserve-3d';
+  heroLeft.style.willChange = 'transform';
+
+  window.addEventListener('mousemove', e => {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    tx = (e.clientX / vw - 0.5) * 2;  // -1 to 1
+    ty = (e.clientY / vh - 0.5) * 2;  // -1 to 1
+  });
+
+  function lerp(a, b, t){ return a + (b - a) * t; }
+
+  function animLeft(){
+    cx = lerp(cx, tx, 0.05);
+    cy = lerp(cy, ty, 0.05);
+    // Subtle tilt — right = tilt right, up = tilt up
+    const rotY =  cx * 5;   // left-right tilt max ±5deg
+    const rotX = -cy * 3;   // up-down tilt max ±3deg
+    heroLeft.style.transform =
+      `perspective(1200px) rotateY(${rotY}deg) rotateX(${rotX}deg)`;
+    requestAnimationFrame(animLeft);
+  }
+  animLeft();
+
+  document.addEventListener('mouseleave', () => { tx = 0; ty = 0; });
+})();
+
+
+
+
+
+
+
+// ═══════════════════════════════════════
+// 3D CARDS + HERO TILT — desktop only
+// ═══════════════════════════════════════
+(function(){
+  if(window.innerWidth < 900) return;
+
+  // Floating cards parallax
+  const cards=[document.getElementById('fc1'),document.getElementById('fc2'),document.getElementById('fc3')];
+  const depths=[0.018,0.012,0.022];
+  const tilts=[12,10,14];
+  let tx=0,ty=0,cx=[0,0,0],cy=[0,0,0];
+
+  // Hero-left tilt
+  const heroLeft=document.querySelector('.hero-left');
+  if(heroLeft){
+    heroLeft.style.transformStyle='preserve-3d';
+    heroLeft.style.willChange='transform';
+  }
+  let htx=0,hty=0,hcx=0,hcy=0;
+
+  window.addEventListener('mousemove',e=>{
+    tx=(e.clientX/window.innerWidth-0.5)*2;
+    ty=(e.clientY/window.innerHeight-0.5)*2;
+    htx=tx; hty=ty;
+  });
+  document.addEventListener('mouseleave',()=>{tx=0;ty=0;htx=0;hty=0;});
+
+  function lerp(a,b,t){return a+(b-a)*t}
+
+  function tick(){
+    // Cards
+    cards.forEach((card,i)=>{
+      if(!card)return;
+      cx[i]=lerp(cx[i],tx,0.06);
+      cy[i]=lerp(cy[i],ty,0.06);
+      card.style.transform=`translateX(${cx[i]*depths[i]*120}px) translateY(${cy[i]*depths[i]*80}px) rotateX(${-cy[i]*tilts[i]*0.5}deg) rotateY(${cx[i]*tilts[i]*0.5}deg)`;
+    });
+    // Hero-left
+    if(heroLeft){
+      hcx=lerp(hcx,htx,0.05);
+      hcy=lerp(hcy,hty,0.05);
+      heroLeft.style.transform=`perspective(1200px) rotateY(${hcx*5}deg) rotateX(${-hcy*3}deg)`;
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+
+// ═══════════════════════════════════════
+// MOUSE TRAIL — desktop only
+// ═══════════════════════════════════════
+(function(){
+  if(window.innerWidth < 900) return;
+  const canvas = document.getElementById('trailCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W = window.innerWidth, H = window.innerHeight;
+  canvas.width = W; canvas.height = H;
+  window.addEventListener('resize', () => {
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W; canvas.height = H;
+  });
+  const particles = [];
+  let glowX = W/2, glowY = H/2;
+  window.addEventListener('mousemove', e => {
+    glowX = e.clientX; glowY = e.clientY;
+    for(let i = 0; i < 3; i++){
+      particles.push({
+        x: e.clientX, y: e.clientY,
+        vx: (Math.random()-0.5)*2,
+        vy: (Math.random()-0.5)*2,
+        r: Math.random()*4+2,
+        life: 1,
+        color: Math.random()>0.5 ? [255,102,0] : [255,180,0]
+      });
+    }
+  });
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    const g = ctx.createRadialGradient(glowX,glowY,0,glowX,glowY,60);
+    g.addColorStop(0,'rgba(255,102,0,0.12)');
+    g.addColorStop(0.5,'rgba(255,180,0,0.05)');
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.beginPath();
+    ctx.arc(glowX,glowY,60,0,Math.PI*2);
+    ctx.fillStyle = g;
+    ctx.fill();
+    for(let i = particles.length-1; i >= 0; i--){
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy;
+      p.life -= 0.035; p.r *= 0.96;
+      if(p.life <= 0){ particles.splice(i,1); continue; }
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = 'rgba('+p.color[0]+','+p.color[1]+','+p.color[2]+','+p.life*0.7+')';
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
